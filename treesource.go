@@ -2,9 +2,6 @@ package main
 
 import (
 	"flag"
-	"os"
-
-	"github.com/mattn/go-isatty"
 )
 
 type TestState struct {
@@ -20,11 +17,13 @@ func (t *TestState) Reset() {
 }
 
 func main() {
-	useTUI := flag.Bool("tui", false, "use text interface")
+	useTUI := flag.Bool("tui", true, "use text interface")
 	useGUI := flag.Bool("gui", false, "use graphical interface")
-	if (*useTUI && !*useGUI) || (isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd())) {
-		runTUI()
-	} else {
+	flag.Parse()
+
+	if *useGUI || !isTTY() {
 		runGUI()
+	} else if *useTUI || isTTY() {
+		runTUI()
 	}
 }

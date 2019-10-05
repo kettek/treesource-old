@@ -1,3 +1,5 @@
+// +build !notui
+
 package main
 
 import "fmt"
