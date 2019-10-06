@@ -9,3 +9,7 @@ func isTTY() bool {
 
 	return bool(t)
 }
+
+func closeTTY() {
+	C.closeTTY()
+}

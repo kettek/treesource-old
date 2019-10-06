@@ -4,10 +4,21 @@
   #define _WIN32_WINNT   0x0500
 #endif
 #include <windows.h>
+#include <stdbool.h>
 #include "Wincon.h" 
 
 bool isTTY() {
-  return false;
+  HWND consoleWnd = GetConsoleWindow();
+  DWORD dwProcessId;
+  GetWindowThreadProcessId(consoleWnd, &dwProcessId);
+  if (GetCurrentProcessId()==dwProcessId) {
+    return false;
+  }
+  return true;
+}
+
+void closeTTY() {
+  ShowWindow(GetConsoleWindow(), SW_HIDE);
 }
 #elif defined(__APPLE__) || defined(__linux) || defined(__unix) || defined(__posix)
 #include <stdio.h>
@@ -20,4 +31,6 @@ bool isTTY() {
   } 
   return false;
 }
+
+void closeTTY() {}
 #endif

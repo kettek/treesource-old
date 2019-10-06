@@ -17,6 +17,11 @@ func (t *TestState) Reset() {
 }
 
 func main() {
+	if !isTTY() {
+		// We close the console window on Windows. This allows us to have a graphical window without a console when running from a non-console location.
+		closeTTY()
+	}
+
 	useTUI := flag.Bool("tui", true, "use text interface")
 	useGUI := flag.Bool("gui", false, "use graphical interface")
 	flag.Parse()
