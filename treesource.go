@@ -21,6 +21,7 @@ func (a *App) Sync() {
 }
 
 func (a *App) HandleEvent(s string, v interface{}) {
+	fmt.Printf("e: %s\n", s)
 	switch s {
 	case "sync":
 		a.Sync()

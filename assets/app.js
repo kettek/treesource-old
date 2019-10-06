@@ -45,8 +45,4 @@ jsApp.init = function() {
   jsApp.setupTabs()
 }
 
-if (document.readyState === 'ready' || document.readyState === 'complete') {
-  jsApp.init()
-} else {
-  window.addEventListener('DOMContentLoaded', jsApp.init)
-}
+window.addEventListener('DOMContentLoaded', jsApp.init)

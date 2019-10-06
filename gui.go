@@ -49,38 +49,27 @@ func runGUI() error {
 	})
 	defer w.Exit()
 
-	w.Dispatch(func() {
-		w.Bind("app", &app)
-		// Inject CSS
-		w.Eval(fmt.Sprintf(`(function(css){
-			function init() {
-    	  var style = document.createElement('style');
-    	  var head = document.head || document.getElementsByTagName('head')[0];
-    	  style.setAttribute('type', 'text/css');
-    	  if (style.styleSheet) {
-    	  	style.styleSheet.cssText = css;
-    	  } else {
-    	  	style.appendChild(document.createTextNode(css));
-				}
-				head.appendChild(style);
+	w.Bind("app", &app)
+	// Inject CSS
+	w.Eval(fmt.Sprintf(`(function(css){
+		function init() {
+   	  var style = document.createElement('style');
+   	  var head = document.head || document.getElementsByTagName('head')[0];
+   	  style.setAttribute('type', 'text/css');
+   	  if (style.styleSheet) {
+   	  	style.styleSheet.cssText = css;
+   	  } else {
+   	  	style.appendChild(document.createTextNode(css));
 			}
-			if (document.readyState === 'ready' || document.readyState === 'complete') {
-				init()
-			} else {
-				window.addEventListener('DOMContentLoaded', init)
-			}
-    })("%s")`, template.JSEscapeString(string(myCSS))))
+			head.appendChild(style);
+		}
+		window.addEventListener('DOMContentLoaded', init)
+  })("%s")`, template.JSEscapeString(string(myCSS))))
 
-		// Inject JS
-		w.Eval(string(myJS))
-	})
+	// Inject JS
+	w.Eval(string(myJS))
 
 	w.Run()
-
-	/*	w.Dispatch(func() {
-		r := w.Dialog(webview.DialogTypeOpen, webview.DialogFlagDirectory, "Wat", "butts")
-		fmt.Printf("%+v\n", r)
-	})*/
 
 	return nil
 }
