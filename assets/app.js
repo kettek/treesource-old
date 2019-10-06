@@ -1,5 +1,3 @@
-window.addEventListener('DOMContentLoaded', function() {
-
 window.jsApp = {
   title: 'treesource',
   el: null,
@@ -41,8 +39,14 @@ jsApp.setupTabs = function() {
   }
 }
 
-jsApp.el = document.getElementById('jsApp')
-jsApp.setupMenu()
-jsApp.setupTabs()
+jsApp.init = function() {
+  jsApp.el = document.getElementById('jsApp')
+  jsApp.setupMenu()
+  jsApp.setupTabs()
+}
 
-})
+if (document.readyState === 'ready' || document.readyState === 'complete') {
+  jsApp.init()
+} else {
+  window.addEventListener('DOMContentLoaded', jsApp.init)
+}

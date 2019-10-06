@@ -53,7 +53,7 @@ func runGUI() error {
 		w.Bind("app", &app)
 		// Inject CSS
 		w.Eval(fmt.Sprintf(`(function(css){
-			window.addEventListener('DOMContentLoaded', function() {
+			function init() {
     	  var style = document.createElement('style');
     	  var head = document.head || document.getElementsByTagName('head')[0];
     	  style.setAttribute('type', 'text/css');
@@ -63,7 +63,12 @@ func runGUI() error {
     	  	style.appendChild(document.createTextNode(css));
 				}
 				head.appendChild(style);
-			})
+			}
+			if (document.readyState === 'ready' || document.readyState === 'complete') {
+				init()
+			} else {
+				window.addEventListener('DOMContentLoaded', init)
+			}
     })("%s")`, template.JSEscapeString(string(myCSS))))
 
 		// Inject JS
