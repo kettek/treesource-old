@@ -47,33 +47,35 @@ func runGUI() error {
 		Resizable: true,
 		Debug:     true,
 	})
+	defer w.Exit()
 
 	w.Dispatch(func() {
 		w.Bind("app", &app)
 		// Inject CSS
 		w.Eval(fmt.Sprintf(`(function(css){
-      var style = document.createElement('style');
-      var head = document.head || document.getElementsByTagName('head')[0];
-      style.setAttribute('type', 'text/css');
-      if (style.styleSheet) {
-      	style.styleSheet.cssText = css;
-      } else {
-      	style.appendChild(document.createTextNode(css));
-      }
-      head.appendChild(style);
+			window.addEventListener('DOMContentLoaded', function() {
+    	  var style = document.createElement('style');
+    	  var head = document.head || document.getElementsByTagName('head')[0];
+    	  style.setAttribute('type', 'text/css');
+    	  if (style.styleSheet) {
+    	  	style.styleSheet.cssText = css;
+    	  } else {
+    	  	style.appendChild(document.createTextNode(css));
+				}
+				head.appendChild(style);
+			})
     })("%s")`, template.JSEscapeString(string(myCSS))))
 
 		// Inject JS
 		w.Eval(string(myJS))
-		//w.Eval(template.JSEscapeString(string(myJS)))
 	})
+
+	w.Run()
 
 	/*	w.Dispatch(func() {
 		r := w.Dialog(webview.DialogTypeOpen, webview.DialogFlagDirectory, "Wat", "butts")
 		fmt.Printf("%+v\n", r)
 	})*/
-
-	w.Run()
 
 	return nil
 }

@@ -1,4 +1,5 @@
-(function(){
+window.addEventListener('DOMContentLoaded', function() {
+
 window.jsApp = {
   title: 'treesource',
   el: null,
@@ -40,11 +41,8 @@ jsApp.setupTabs = function() {
   }
 }
 
-jsApp.init = function() {
-  jsApp.setupMenu()
-  jsApp.setupTabs()
-  jsApp.el = document.getElementById('jsApp')
-}
+jsApp.el = document.getElementById('jsApp')
+jsApp.setupMenu()
+jsApp.setupTabs()
 
-jsApp.init()
-})()
+})
