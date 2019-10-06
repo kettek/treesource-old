@@ -45,4 +45,8 @@ jsApp.init = function() {
   jsApp.setupTabs()
 }
 
-window.addEventListener('DOMContentLoaded', jsApp.init)
+if (/MSIE|Trident/.test(window.navigator.userAgent)) {
+  jsApp.init()
+} else {
+  window.addEventListener('DOMContentLoaded', jsApp.init)
+}

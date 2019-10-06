@@ -63,7 +63,11 @@ func runGUI() error {
 			}
 			head.appendChild(style);
 		}
-		window.addEventListener('DOMContentLoaded', init)
+		if (/MSIE|Trident/.test(window.navigator.userAgent)) {
+			init()
+		} else {
+			window.addEventListener('DOMContentLoaded', init)
+		}
   })("%s")`, template.JSEscapeString(string(myCSS))))
 
 	// Inject JS
