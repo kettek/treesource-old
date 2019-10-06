@@ -4,6 +4,7 @@ package main
 
 import "fmt"
 
-func runTUI() {
+func runTUI() error {
 	fmt.Print("TUI")
+	return nil
 }

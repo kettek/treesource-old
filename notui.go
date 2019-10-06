@@ -2,8 +2,8 @@
 
 package main
 
-import "fmt"
+import "errors"
 
-func runTUI() {
-	fmt.Println("TUI is disabled!")
+func runTUI() error {
+	return errors.New("TUI is disabled")
 }

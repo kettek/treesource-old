@@ -2,8 +2,11 @@
 
 package main
 
-import "fmt"
+import "errors"
 
-func runGUI() {
-	fmt.Println("GUI is disabled!")
+func runGUI() error {
+	return errors.New("GUI is disabled")
+}
+
+func (a *App) Dispatch(e string, v interface{}) {
 }

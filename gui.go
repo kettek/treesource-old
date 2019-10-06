@@ -3,6 +3,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"net/url"
@@ -10,24 +11,45 @@ import (
 	"github.com/zserge/webview"
 )
 
-func runGUI() {
-	const myHTML = `<!doctype html><html><head></head><body>yo</body></html>`
+var w webview.WebView
 
-	const myStylesCSS = `
-body {
-  background: black;
-  color: white;
-}`
+func (a *App) Dispatch(e string, v interface{}) {
+	w.Dispatch(func() {
+		js, err := json.Marshal(v)
+		if err != nil {
+			fmt.Println(err)
+		}
+		w.Eval(fmt.Sprintf("jsApp.handleEvent('%s', %s)", template.JSEscapeString(e), string(js)))
+	})
+}
 
-	w := webview.New(webview.Settings{
+func runGUI() error {
+	myHTML, err := Asset("assets/app.html")
+	if err != nil {
+		return err
+	}
+
+	myCSS, err := Asset("assets/app.css")
+	if err != nil {
+		return err
+	}
+
+	myJS, err := Asset("assets/app.js")
+	if err != nil {
+		return err
+	}
+
+	w = webview.New(webview.Settings{
 		Title:     "treesource",
-		URL:       `data:text/html,` + url.PathEscape(myHTML),
+		URL:       `data:text/html,` + url.PathEscape(string(myHTML)),
+		Width:     512,
+		Height:    640,
 		Resizable: true,
 		Debug:     true,
 	})
 
 	w.Dispatch(func() {
-		w.Bind("teststate", &TestState{})
+		w.Bind("app", &app)
 		// Inject CSS
 		w.Eval(fmt.Sprintf(`(function(css){
       var style = document.createElement('style');
@@ -39,21 +61,19 @@ body {
       	style.appendChild(document.createTextNode(css));
       }
       head.appendChild(style);
-    })("%s")`, template.JSEscapeString(myStylesCSS)))
+    })("%s")`, template.JSEscapeString(string(myCSS))))
 
 		// Inject JS
-		w.Eval(fmt.Sprintf(`
-      //alert(teststate.data.value)
-    `))
-		//    w.Eval(myJSFramework)
-		//    w.Eval(myAppJS)
+		w.Eval(string(myJS))
+		//w.Eval(template.JSEscapeString(string(myJS)))
 	})
 
-	w.Dispatch(func() {
+	/*	w.Dispatch(func() {
 		r := w.Dialog(webview.DialogTypeOpen, webview.DialogFlagDirectory, "Wat", "butts")
 		fmt.Printf("%+v\n", r)
-	})
+	})*/
 
 	w.Run()
 
+	return nil
 }
