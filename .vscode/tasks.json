@@ -14,7 +14,7 @@
     },
 		{
 			"label": "build (debug)",
-			"command": "go build -o treesource",
+			"command": "go build",
 			"group": {
 				"kind": "build",
 				"isDefault": true
@@ -22,32 +22,7 @@
     },
  		{
 			"label": "build (release)",
-			"command": "go build -ldflags='-s -w' -o treesource",
-			"group": {
-				"kind": "build",
-        "isDefault": true
-			}
-		},		
-		{
-			"label": "run win32 gui",
-			"command": ".\treesource.exe -gui",
-			"group": {
-				"kind": "build",
-				"isDefault": true
-      }
-    },
-
-		{
-			"label": "build win32 (debug)",
-			"command": "go build -o treesource.exe",
-			"group": {
-				"kind": "build",
-				"isDefault": true
-      }
-    },
- 		{
-			"label": "build win32 (release)",
-			"command": "go build -ldflags='-s -w' -o treesource.exe",
+			"command": "go build -ldflags='-s -w'",
 			"group": {
 				"kind": "build",
         "isDefault": true
