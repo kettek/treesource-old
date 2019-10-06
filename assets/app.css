@@ -1,0 +1,84 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: #001;
+  color: #ffe;
+  margin: 0;
+  padding: 0;
+  font-size: 4vw;
+  display: flex;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#jsApp {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  font-size: 1em;
+}
+
+button, input {
+  font-weight: bold;
+  font-size: .75em;
+
+  border: 0;
+  margin: .25em;
+  padding: .25em;
+  border-radius: 2px;
+}
+
+button {
+  cursor: pointer;
+}
+
+#jsApp__tabs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #223;
+}
+#jsApp__tabs > button {
+  flex-grow: 1;
+  margin-bottom: 0;
+  color: #ffe;
+  background: #001;
+  border-radius: 2px 2px 0 0;
+}
+#jsApp__tabs > button.selected {
+  color: #ffe;
+  background: #445;
+}
+
+#jsApp > section {
+  display: none;
+  color: #ffe;
+  background: #445;
+  flex-grow: 1;
+  padding: .25em;
+}
+
+#jsApp > section.selected {
+  display: flex;
+}
+
+#jsApp__sectionSearch {
+  display: flex;
+  flex-direction: column;
+}
+
+#jsApp__sectionSearch__label {
+  display: flex;
+}
+#jsApp__sectionSearch__input {
+  width: auto;
+  flex-grow: 1;
+}
+
+#jsApp__sectionSearch__results {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
