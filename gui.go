@@ -63,7 +63,7 @@ func runGUI() error {
 			}
 			head.appendChild(style);
 		}
-		if (/MSIE|Trident/.test(window.navigator.userAgent)) {
+		if (/Linux|MSIE|Trident/.test(window.navigator.userAgent)) {
 			init()
 		} else {
 			window.addEventListener('DOMContentLoaded', init)
