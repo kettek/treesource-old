@@ -14,6 +14,9 @@ import (
 var w webview.WebView
 
 func (a *App) Dispatch(e string, v interface{}) {
+	if !app.gui {
+		return
+	}
 	w.Dispatch(func() {
 		js, err := json.Marshal(v)
 		if err != nil {
@@ -74,6 +77,8 @@ func runGUI() error {
 	w.Eval(string(myJS))
 
 	w.Run()
+
+	app.gui = true
 
 	return nil
 }

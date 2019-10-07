@@ -3,9 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
 )
 
 type App struct {
+	gui     bool
 	Title   string
 	Entries []AppEntry
 }
@@ -42,6 +44,11 @@ type AppDatabase struct {
 
 var app App
 
+func showHelp() {
+	fmt.Fprintf(flag.CommandLine.Output(), "Usage of %s:\n", os.Args[0])
+	flag.PrintDefaults()
+}
+
 func main() {
 	if !isTTY() {
 		// We close the console window on Windows. This allows us to have a graphical window without a console when running from a non-console location.
@@ -50,6 +57,11 @@ func main() {
 
 	useTUI := flag.Bool("tui", true, "use text interface")
 	useGUI := flag.Bool("gui", false, "use graphical interface")
+
+	flag.Usage = func() {
+		showHelp()
+	}
+
 	flag.Parse()
 
 	if *useGUI || !isTTY() {
