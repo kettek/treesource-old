@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 )
 
 type App struct {
@@ -12,9 +13,14 @@ type App struct {
 	Entries []AppEntry
 }
 
-func (a *App) Init() {
-	fmt.Println("init called")
+func (a *App) Init(dir string) (err error) {
+	dir, err = filepath.Abs(dir)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("initializing treesource in \"%s\"\n", dir)
 	a.Dispatch("init", nil)
+	return nil
 }
 
 func (a *App) Sync() {
@@ -28,7 +34,7 @@ func (a *App) HandleEvent(s string, v interface{}) {
 	case "sync":
 		a.Sync()
 	case "init":
-		a.Init()
+		a.Init("")
 	}
 }
 
@@ -44,9 +50,20 @@ type AppDatabase struct {
 
 var app App
 
+var cmdsHelp map[string]string
+
+func setupCmds() {
+	cmdsHelp = make(map[string]string)
+	cmdsHelp["init"] = "Initialize the current directory or provided path as a treesource directory"
+	cmdsHelp["sync"] = "Synchronize the symbolic link structure with the treesource database"
+}
+
 func showHelp() {
 	fmt.Fprintf(flag.CommandLine.Output(), "Usage of %s:\n", os.Args[0])
 	flag.PrintDefaults()
+	for k, v := range cmdsHelp {
+		fmt.Fprintf(flag.CommandLine.Output(), "  %s\n\t%s\n", k, v)
+	}
 }
 
 func main() {
@@ -54,6 +71,8 @@ func main() {
 		// We close the console window on Windows. This allows us to have a graphical window without a console when running from a non-console location.
 		closeTTY()
 	}
+
+	setupCmds()
 
 	useTUI := flag.Bool("tui", true, "use text interface")
 	useGUI := flag.Bool("gui", false, "use graphical interface")

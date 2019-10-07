@@ -4,6 +4,7 @@ package main
 
 import (
 	"flag"
+	"os"
 )
 
 func runTUI() error {
@@ -16,7 +17,15 @@ func runTUI() error {
 
 	switch cmd {
 	case "init":
-		app.Init()
+		if len(args) == 0 {
+			dir, err := os.Getwd()
+			if err != nil {
+				return err
+			}
+			app.Init(dir)
+		} else {
+			app.Init(args[0])
+		}
 	case "sync":
 		app.Sync()
 	default:
