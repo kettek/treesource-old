@@ -10,10 +10,10 @@ jsApp.handleEvent = function(name, payload) {
 
 jsApp.setupMenu = function() {
   document.getElementById('jsApp__menu__init').onclick = function(e) {
-    app.handleEvent('init', {})
+    app.handleEvent('init', {test: 123})
   }
   document.getElementById('jsApp__menu__sync').onclick = function(e) {
-    app.handleEvent('sync', {})
+    app.handleEvent('sync', {Resync: true})
   }
 }
 
@@ -39,10 +39,19 @@ jsApp.setupTabs = function() {
   }
 }
 
+jsApp.setupSearch = function() {
+  let searchButton = document.getElementById('jsApp__sectionSearch__button')
+  let searchInput = document.getElementById('jsApp__sectionSearch__input')
+  searchButton.onclick = function(e) {
+    app.handleEvent('search', {SearchString: searchInput.value})
+  }
+}
+
 jsApp.init = function() {
   jsApp.el = document.getElementById('jsApp')
   jsApp.setupMenu()
   jsApp.setupTabs()
+  jsApp.setupSearch()
 }
 
 if (/Linux|MSIE|Trident/.test(window.navigator.userAgent)) {

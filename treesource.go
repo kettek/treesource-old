@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/mitchellh/mapstructure"
 	"os"
 	"path/filepath"
 )
@@ -13,29 +14,57 @@ type App struct {
 	Entries []AppEntry
 }
 
-func (a *App) Init(dir string) (err error) {
-	dir, err = filepath.Abs(dir)
+func (a *App) Init(cmd InitCmd) (err error) {
+	dir, err := filepath.Abs(cmd.TargetDirectory)
 	if err != nil {
 		return err
 	}
 	fmt.Printf("initializing treesource in \"%s\"\n", dir)
-	a.Dispatch("init", nil)
+	a.Dispatch("init", cmd)
 	return nil
 }
 
-func (a *App) Sync() {
+func (a *App) Sync(cmd SyncCmd) {
 	fmt.Println("sync called")
-	a.Dispatch("sync", nil)
+	a.Dispatch("sync", cmd)
+}
+
+func (a *App) Search(cmd SearchCmd) {
+	fmt.Println("search called")
+	fmt.Printf("searching for %s\n", cmd.SearchString)
+	// a.Dispatch("searchResults", ...)
+}
+
+type InitCmd struct {
+	TargetDirectory string
+}
+
+type SyncCmd struct {
+}
+
+type SearchCmd struct {
+	SearchString string
 }
 
 func (a *App) HandleEvent(s string, v interface{}) {
-	fmt.Printf("e: %s\n", s)
 	switch s {
 	case "sync":
-		a.Sync()
+		var syncCmd SyncCmd
+		if err := mapstructure.Decode(v, &syncCmd); err == nil {
+			a.Sync(syncCmd)
+		}
 	case "init":
-		a.Init("")
+		var initCmd InitCmd
+		if err := mapstructure.Decode(v, &initCmd); err == nil {
+			a.Init(initCmd)
+		}
+	case "search":
+		var searchCmd SearchCmd
+		if err := mapstructure.Decode(v, &searchCmd); err == nil {
+			a.Search(searchCmd)
+		}
 	}
+
 }
 
 type AppEntry struct {

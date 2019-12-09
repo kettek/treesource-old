@@ -22,12 +22,16 @@ func runTUI() error {
 			if err != nil {
 				return err
 			}
-			app.Init(dir)
+			app.Init(InitCmd{
+				TargetDirectory: dir,
+			})
 		} else {
-			app.Init(args[0])
+			app.Init(InitCmd{
+				TargetDirectory: args[0],
+			})
 		}
 	case "sync":
-		app.Sync()
+		app.Sync(SyncCmd{})
 	default:
 		showHelp()
 	}
