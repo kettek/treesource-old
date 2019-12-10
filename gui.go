@@ -17,16 +17,20 @@ func (a *App) Dispatch(e string, v interface{}) {
 	if !app.gui {
 		return
 	}
+	fmt.Printf("what the\n")
 	w.Dispatch(func() {
 		js, err := json.Marshal(v)
 		if err != nil {
 			fmt.Println(err)
 		}
+		fmt.Printf("jsApp.handleEvent('%s', %s)", template.JSEscapeString(e), string(js))
 		w.Eval(fmt.Sprintf("jsApp.handleEvent('%s', %s)", template.JSEscapeString(e), string(js)))
 	})
 }
 
 func runGUI() error {
+	app.gui = true
+
 	myHTML, err := Asset("assets/app.html")
 	if err != nil {
 		return err
@@ -77,8 +81,6 @@ func runGUI() error {
 	w.Eval(string(myJS))
 
 	w.Run()
-
-	app.gui = true
 
 	return nil
 }

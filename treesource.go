@@ -20,7 +20,9 @@ func (a *App) Init(cmd InitCmd) (err error) {
 		return err
 	}
 	fmt.Printf("initializing treesource in \"%s\"\n", dir)
-	a.Dispatch("init", cmd)
+	if cmd.CommandIndex > 0 {
+		a.Dispatch("init", cmd)
+	}
 	return nil
 }
 
@@ -37,13 +39,16 @@ func (a *App) Search(cmd SearchCmd) {
 
 type InitCmd struct {
 	TargetDirectory string
+	CommandIndex int
 }
 
 type SyncCmd struct {
+	CommandIndex int
 }
 
 type SearchCmd struct {
 	SearchString string
+	CommandIndex int
 }
 
 func (a *App) HandleEvent(s string, v interface{}) {

@@ -1,19 +1,39 @@
 window.jsApp = {
   title: 'treesource',
   el: null,
+  commandIndex: 1,
+  pendingCallbacks: {},
 }
 
 jsApp.handleEvent = function(name, payload) {
-  alert(name)
-  alert(payload)
+  if (payload.CommandIndex) {
+      if (jsApp.pendingCallbacks[payload.CommandIndex]) {
+          jsApp.pendingCallbacks[payload.CommandIndex](payload)
+          delete jsApp.pendingCallbacks[payload.CommandIndex]
+      }
+  }
+}
+
+jsApp.acquireCommandIndex = function() {
+    return jsApp.commandIndex++
+}
+
+jsApp.sendMessage = function(eventName, eventData, eventCallback) {
+  eventData.CommandIndex = jsApp.acquireCommandIndex()
+  jsApp.pendingCallbacks[eventData.CommandIndex] = eventCallback
+  app.handleEvent(eventName, eventData)
 }
 
 jsApp.setupMenu = function() {
   document.getElementById('jsApp__menu__init').onclick = function(e) {
-    app.handleEvent('init', {test: 123})
+    jsApp.sendMessage('init', {test: 123}, function(data) {
+        alert(JSON.stringify(data))
+    })
   }
   document.getElementById('jsApp__menu__sync').onclick = function(e) {
-    app.handleEvent('sync', {Resync: true})
+    jsApp.sendMessage('sync', {Resync: true}, function(data) {
+      alert(JSON.stringify(data))
+    })
   }
 }
 
