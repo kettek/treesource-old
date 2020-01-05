@@ -1,9 +1,9 @@
 // +build notui
 
-package main
+package treesource
 
 import "errors"
 
-func runTUI() error {
+func RunTUI() error {
 	return errors.New("TUI is disabled")
 }

@@ -1,16 +1,16 @@
 // +build !notui
 
-package main
+package treesource
 
 import (
 	"flag"
 	"os"
 )
 
-func runTUI() error {
+func RunTUI() error {
 	args := flag.Args()
 	if len(args) == 0 {
-		showHelp()
+		ShowHelp()
 		return nil
 	}
 	cmd, args := args[0], args[1:]
@@ -33,7 +33,7 @@ func runTUI() error {
 	case "sync":
 		app.Sync(SyncCmd{})
 	default:
-		showHelp()
+		ShowHelp()
 	}
 	return nil
 }

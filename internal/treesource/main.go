@@ -1,4 +1,4 @@
-package main
+package treesource
 
 import (
 	"flag"
@@ -39,7 +39,7 @@ func (a *App) Search(cmd SearchCmd) {
 
 type InitCmd struct {
 	TargetDirectory string
-	CommandIndex int
+	CommandIndex    int
 }
 
 type SyncCmd struct {
@@ -86,44 +86,16 @@ var app App
 
 var cmdsHelp map[string]string
 
-func setupCmds() {
+func SetupCmds() {
 	cmdsHelp = make(map[string]string)
 	cmdsHelp["init"] = "Initialize the current directory or provided path as a treesource directory"
 	cmdsHelp["sync"] = "Synchronize the symbolic link structure with the treesource database"
 }
 
-func showHelp() {
+func ShowHelp() {
 	fmt.Fprintf(flag.CommandLine.Output(), "Usage of %s:\n", os.Args[0])
 	flag.PrintDefaults()
 	for k, v := range cmdsHelp {
 		fmt.Fprintf(flag.CommandLine.Output(), "  %s\n\t%s\n", k, v)
-	}
-}
-
-func main() {
-	if !isTTY() {
-		// We close the console window on Windows. This allows us to have a graphical window without a console when running from a non-console location.
-		closeTTY()
-	}
-
-	setupCmds()
-
-	useTUI := flag.Bool("tui", true, "use text interface")
-	useGUI := flag.Bool("gui", false, "use graphical interface")
-
-	flag.Usage = func() {
-		showHelp()
-	}
-
-	flag.Parse()
-
-	if *useGUI || !isTTY() {
-		if err := runGUI(); err != nil {
-			fmt.Println(err)
-		}
-	} else if *useTUI || isTTY() {
-		if err := runTUI(); err != nil {
-			fmt.Println(err)
-		}
 	}
 }

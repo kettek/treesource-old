@@ -1,6 +1,6 @@
 // +build !nogui
 
-package main
+package treesource
 
 import (
 	"encoding/json"
@@ -9,6 +9,7 @@ import (
 	"net/url"
 
 	"github.com/zserge/webview"
+	"treesource/assets"
 )
 
 var w webview.WebView
@@ -28,20 +29,20 @@ func (a *App) Dispatch(e string, v interface{}) {
 	})
 }
 
-func runGUI() error {
+func RunGUI() error {
 	app.gui = true
 
-	myHTML, err := Asset("assets/app.html")
+	myHTML, err := assets.Asset("html/app.html")
 	if err != nil {
 		return err
 	}
 
-	myCSS, err := Asset("assets/app.css")
+	myCSS, err := assets.Asset("css/app.css")
 	if err != nil {
 		return err
 	}
 
-	myJS, err := Asset("assets/app.js")
+	myJS, err := assets.Asset("js/app.js")
 	if err != nil {
 		return err
 	}

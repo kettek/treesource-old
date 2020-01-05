@@ -1,10 +1,10 @@
 // +build nogui
 
-package main
+package treesource
 
 import "errors"
 
-func runGUI() error {
+func RunGUI() error {
 	return errors.New("GUI is disabled")
 }
 
