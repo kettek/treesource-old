@@ -1,5 +1,4 @@
 GOCMD=go
-GOBIN=./bin
 GOBUILD=$(GOCMD) build
 GOCLEAN=$(GOCMD) clean
 GOGENERATE=$(GOCMD) generate
@@ -24,4 +23,5 @@ $(ASSETS_SRC):
 
 clean:
 	rm -f $(ASSETS_SRC)
-	$(GOCLEAN)
+	rm -f $(ASSETS_DIR)/resource*.syso
+	rm -f treesource treesource.exe
